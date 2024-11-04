@@ -28,8 +28,8 @@ const Login = () => {
         navigate("/video");
       })
       .catch((err) => {
-        console.log(err);
-        toast.error(err.response.data.message);
+        console.log(err.response);
+        toast.error(err.response.data.error);
         setIsLoading(false);
       });
   };
