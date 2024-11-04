@@ -1,0 +1,26 @@
+.login-form-container {
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(19, 19, 19);
+  padding: 25px 20px 45px 20px;
+  border-radius: 10px;
+  row-gap: 7px;
+  min-width: 350px;
+}
+
+.sign-in {
+  color: aliceblue;
+  font-size: 12px;
+  align-self: flex-end;
+  margin-top: 10px;
+}
+
+.link {
+  cursor: pointer;
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.link:hover {
+  color: #f61c0d;
+}
