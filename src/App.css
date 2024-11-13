@@ -1,0 +1,8 @@
+.single-video-container {
+  display: flex;
+  column-gap: 15px;
+  row-gap: 50px;
+  align-items: start;
+  justify-content: start;
+  flex-wrap: wrap;
+}

@@ -30,7 +30,7 @@ const Signup = () => {
     formData.append("logo", logo);
 
     axios
-      .post("https://ourtube-fe6i.onrender.com/user/signup", formData)
+      .post(`${process.env.REACT_APP_BACKEND_URL}/user/signup`, formData)
       .then((res) => {
         toast("Account Created Successfully!");
         setIsLoading(false);
@@ -46,12 +46,13 @@ const Signup = () => {
   return (
     <>
       <div className="container">
-        <div className="main-heading">
+        <Link to="/home" className="link-inline">
           <img src="Logo-Ourtube.svg" alt="Logo" className="logo-image" />
           <h1 className="heading-text">OurTube</h1>
-        </div>
+        </Link>
         <div>
           <form className="form-container" onSubmit={submitHandler}>
+            <h1 className="form-heading">Sign Up</h1>
             <input
               required
               type="text"
@@ -99,7 +100,7 @@ const Signup = () => {
                 "Register"
               )}
             </button>
-            <p className="sign-in">
+            <p className="sign-up">
               Already have an account?{" "}
               <Link to="/login" className="link">
                 Sign In

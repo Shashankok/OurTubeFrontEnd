@@ -3,31 +3,57 @@ import "./App.css";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Video from "./components/Video";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Home from "./components/Home";
+import MyAccount from "./components/MyAccount";
+import AppLayout from "./Layouts/AppLayout";
+import UploadVideo from "./components/UploadVideo";
+import VideoPlayer from "./components/VideoPlayer";
 
 function App() {
   const myRoutes = createBrowserRouter([
     {
-      path: "/",
-      Component: Signup,
+      element: <AppLayout />, // Wraps Header and MiniSideNav
+      children: [
+        {
+          path: "/video",
+          element: <Video />,
+        },
+        {
+          path: "/home",
+          element: <Home />,
+        },
+        {
+          path: "/",
+          element: <Home />,
+        },
+        {
+          path: "/account",
+          element: <MyAccount />,
+        },
+        {
+          path: "/upload",
+          element: <UploadVideo />,
+        },
+        {
+          path: "/videoPlayer",
+          element: <VideoPlayer />,
+        },
+      ],
     },
     {
       path: "/signup",
-      Component: Signup,
+      element: <Signup />,
     },
     {
       path: "/login",
-      Component: Login,
-    },
-    {
-      path: "/video",
-      Component: Video,
+      element: <Login />,
     },
   ]);
   return (
     <>
-      <RouterProvider router={myRoutes}></RouterProvider>
+      <RouterProvider router={myRoutes} />
       <ToastContainer />
     </>
   );

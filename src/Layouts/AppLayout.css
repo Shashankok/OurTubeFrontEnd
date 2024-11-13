@@ -1,0 +1,17 @@
+/* AppLayout.css */
+
+.app-layout {
+  display: flex;
+  flex-direction: column;
+}
+
+.app-content {
+  display: flex;
+}
+
+.main-content {
+  flex: 1; /* Allows it to fill remaining space */
+  margin-left: 70px; /* Offset by the sidebar width */
+  padding: 30px 40px;
+  overflow-y: auto; /* Allows scrolling if content is long */
+}

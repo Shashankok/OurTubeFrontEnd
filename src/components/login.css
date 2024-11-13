@@ -21,6 +21,15 @@
   color: #ffffff;
 }
 
+.link-inline {
+  cursor: pointer;
+  text-decoration: none;
+  color: black;
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+}
+
 .link:hover {
   color: #f61c0d;
 }

@@ -3,12 +3,16 @@ import "./login.css";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { logIn } from "../store/auth-slice/authSlice";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -18,14 +22,17 @@ const Login = () => {
     formData.append("password", password);
 
     axios
-      .post("https://ourtube-fe6i.onrender.com/user/login", formData)
+      .post(`${process.env.REACT_APP_BACKEND_URL}/user/login`, formData)
       .then((res) => {
         console.log(res.data);
         toast.success("Logged In Successfully");
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("userId", res.data._id);
+        localStorage.setItem("channelName", res.data.channelName);
+        localStorage.setItem("logoUrl", res.data.logoUrl);
         setIsLoading(false);
-        navigate("/video");
+        dispatch(logIn());
+        navigate("/home");
       })
       .catch((err) => {
         console.log(err.response);
@@ -38,11 +45,14 @@ const Login = () => {
     <>
       <div className="container">
         <div className="main-heading">
-          <img src="Logo-Ourtube.svg" alt="Logo" className="logo-image" />
-          <h1 className="heading-text">OurTube</h1>
+          <Link to="/home" className="link-inline">
+            <img src="Logo-Ourtube.svg" alt="Logo" className="logo-image" />
+            <h1 className="heading-text">OurTube</h1>
+          </Link>
         </div>
         <div>
           <form className="login-form-container" onSubmit={submitHandler}>
+            <h1 className="form-heading">Login</h1>
             <input
               required
               type="email"
@@ -68,7 +78,7 @@ const Login = () => {
                 "Login"
               )}
             </button>
-            <p className="sign-up">
+            <p className="sign-in">
               Do not have an account?{" "}
               <Link to="/signup" className="link">
                 Sign Up
