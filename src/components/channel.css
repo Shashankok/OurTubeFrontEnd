@@ -1,0 +1,34 @@
+/* Subscribed Channels */
+.myAccount-channel-card {
+  flex: 0 0 150px; /* Fixed width for channels */
+  text-align: center;
+  cursor: pointer;
+}
+
+.myAccount-Subscribed-Channels-heading,
+.myAccount-my-videos-heading {
+  margin-top: 40px;
+}
+
+.myAccount-channel-logo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto;
+}
+
+.myAccount-channel-info {
+  margin-top: 10px;
+}
+
+.myAccount-channel-name {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.myAccount-channel-subscribers {
+  font-size: 0.85rem;
+  color: #555;
+}

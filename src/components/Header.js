@@ -5,19 +5,27 @@ import { RiVideoAddLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { PiUserCircle } from "react-icons/pi";
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
 function Header() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const [logoUrl, setLogoUrl] = useState(localStorage.getItem("logoUrl"));
+
+  useEffect(() => {
+    setLogoUrl(localStorage.getItem("logoUrl")); // Update logo URL on mount
+  }, [isLoggedIn]); // React to login/logout changes
 
   return (
     <header className="header">
       <div className="header__left">
         <RxHamburgerMenu className="header__icon" />
-        <img
-          className="header__logo"
-          src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg"
-          alt="YouTube Logo"
-        />
+        <Link to="/home">
+          <img
+            className="header__logo"
+            src="/YouTube_Logo.svg"
+            alt="YouTube Logo"
+          />
+        </Link>
       </div>
       <div className="header__center">
         <input
@@ -34,9 +42,9 @@ function Header() {
           <Link to="/upload" className="links">
             <RiVideoAddLine className="header__icon upload-video-icon" />
           </Link>
-          <Link to="/account">
+          <Link to={`/account/${localStorage.getItem("userId")}`}>
             <img
-              src={localStorage.getItem("logoUrl")}
+              src={logoUrl}
               alt="logo"
               className="header__icon account-logo"
             />

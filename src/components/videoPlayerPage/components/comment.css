@@ -1,0 +1,122 @@
+/* Comment Section */
+.comment-section {
+  margin-top: 20px;
+}
+
+.comment-section h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.comment-form textarea {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  resize: none;
+}
+
+.comment-submit-btn,
+.comment-cancel-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #cc0000; /* YouTube red */
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.comment-cancel-btn {
+  background-color: #f56666; /* YouTube red */
+}
+.comment-cancel-btn:hover {
+  background-color: #c9302c;
+}
+
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.comment-container {
+  display: flex;
+  flex-direction: row;
+  column-gap: 15px;
+}
+
+.comment-user-details {
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+}
+
+.comment-author {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.comment-text {
+  font-size: 14px;
+  color: #606060;
+}
+
+.comment-container {
+  display: flex;
+  align-items: center;
+  column-gap: 15px;
+  position: relative; /* For dropdown positioning */
+  justify-content: space-between;
+}
+
+.commentList-left-container {
+  display: flex;
+  column-gap: 10px;
+}
+.comment-options {
+  position: relative;
+  margin-right: 10px;
+}
+
+.menu-button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.menu-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.menu-dropdown button {
+  padding: 8px 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+}
+
+.menu-dropdown button:hover {
+  background-color: #f0f0f0;
+}

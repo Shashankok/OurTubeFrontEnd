@@ -1,0 +1,4 @@
+.related-videos {
+  display: flex;
+  flex-direction: column;
+}

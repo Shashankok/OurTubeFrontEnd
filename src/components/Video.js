@@ -7,7 +7,6 @@ const Video = ({ video }) => {
   const navigate = useNavigate();
 
   if (!video) return null;
-  // for formatting Video Upload date
 
   // for formating Video Duration
   const formatDuration = (durationInSeconds) => {
@@ -35,7 +34,7 @@ const Video = ({ video }) => {
           <div className="view-date-container">
             <p className="views-count">{video.views} views</p>
             <p className="seperator">&#9679;</p>
-            <p className="upload-date">{formatDate(video.uploadDate)}</p>
+            <p className="upload-date">{formatDate(video.createdAt)}</p>
           </div>
         </div>
       </div>

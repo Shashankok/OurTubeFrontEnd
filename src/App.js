@@ -6,7 +6,7 @@ import Video from "./components/Video";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Home from "./components/Home";
-import MyAccount from "./components/MyAccount";
+import Account from "./components/Account";
 import AppLayout from "./Layouts/AppLayout";
 import UploadVideo from "./components/UploadVideo";
 import VideoPlayer from "./components/VideoPlayer";
@@ -29,8 +29,8 @@ function App() {
           element: <Home />,
         },
         {
-          path: "/account",
-          element: <MyAccount />,
+          path: "/account/:userId",
+          element: <Account />,
         },
         {
           path: "/upload",
@@ -40,15 +40,15 @@ function App() {
           path: "/videoPlayer",
           element: <VideoPlayer />,
         },
+        {
+          path: "/signup",
+          element: <Signup />,
+        },
+        {
+          path: "/login",
+          element: <Login />,
+        },
       ],
-    },
-    {
-      path: "/signup",
-      element: <Signup />,
-    },
-    {
-      path: "/login",
-      element: <Login />,
     },
   ]);
   return (

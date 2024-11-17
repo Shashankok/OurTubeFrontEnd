@@ -1,41 +1,39 @@
 import React, { useEffect, useState } from "react";
 import "./videoPlayer.css";
-import Video from "./Video";
 import { BiDislike, BiLike, BiSolidDislike, BiSolidLike } from "react-icons/bi";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { formatDate } from "../utilities/dateUtils";
 import axios from "axios";
+import Comment from "./videoPlayerPage/components/Comment";
+import RelatedVideo from "./videoPlayerPage/components/RelatedVideo";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 const VideoPlayer = () => {
   const location = useLocation();
   const video = location.state?.video;
-
-  const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState("");
+  const navigate = useNavigate();
   const [subscribed, setSubscribed] = useState(false);
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);
   const [likes, setLikes] = useState(0);
   const [dislikes, setDislikes] = useState(0);
-  const [views, setViews] = useState(0);
   const [subscribers, setSubscribers] = useState(0);
 
-  const handleCommentSubmit = (e) => {
-    e.preventDefault();
-    if (newComment.trim()) {
-      const newCommentObj = {
-        _id: localStorage.getItem("userId"),
-        logo: localStorage.getItem("logoUrl"),
-        channelName: localStorage.getItem("channelName"),
-        commentText: newComment,
-      };
-      setComments([...comments, newCommentObj]);
+  const [isOwner, setIsowner] = useState(false);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
+  const subscribeButtonHandler = () => {
+    if (!isLoggedIn) {
+      // Show error toast
+      toast.error("Please Login to perform this action!");
+      return;
+    }
+    if (subscribed) {
       axios
-        .post(
-          `${process.env.REACT_APP_BACKEND_URL}/comment/new-comment/${video._id}`,
-          { commentText: newComment },
+        .put(
+          `${process.env.REACT_APP_BACKEND_URL}/user/unsubscribe/${video.user_id._id}`,
+          null,
           {
             headers: {
               Authorization: "Bearer " + localStorage.getItem("token"),
@@ -43,21 +41,37 @@ const VideoPlayer = () => {
           }
         )
         .then((res) => {
-          toast.success("Comment Added!");
-          setNewComment("");
+          setSubscribed(false);
         })
         .catch((err) => {
           console.log(err.response);
-          toast.error(err.response.data.error);
+        });
+    } else {
+      axios
+        .put(
+          `${process.env.REACT_APP_BACKEND_URL}/user/subscribe/${video.user_id._id}`,
+          null,
+          {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          }
+        )
+        .then((res) => {
+          setSubscribed(true);
+        })
+        .catch((err) => {
+          console.log(err.response);
         });
     }
   };
 
-  const subscribeButtonHandler = () => {
-    setSubscribed((prev) => !prev);
-  };
-
   const likeButtonHandler = () => {
+    if (!isLoggedIn) {
+      // Show error toast
+      toast.error("Please Login to perform this action!");
+      return;
+    }
     axios
       .put(
         `${process.env.REACT_APP_BACKEND_URL}/video/like/${video._id}`,
@@ -69,8 +83,6 @@ const VideoPlayer = () => {
         }
       )
       .then((res) => {
-        console.log("in like handler api");
-        console.log(res.data);
         if (!liked) {
           setLiked(true);
           setLikes((prevLikes) => prevLikes + 1);
@@ -89,16 +101,27 @@ const VideoPlayer = () => {
   };
 
   useEffect(() => {
+    const localUserId = localStorage.getItem("userId");
+    if (video.user_id._id === localUserId) {
+      setIsowner(true);
+    }
+  }, [video.user_id._id]);
+
+  useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_BACKEND_URL}/video/${video._id}`)
       .then((res) => {
-        console.log(res.data.video);
         const video = res.data.video;
         if (video.likedBy.includes(localStorage.getItem("userId"))) {
           setLiked(true);
         }
         if (video.dislikedBy.includes(localStorage.getItem("userId"))) {
           setDisliked(true);
+        }
+        if (
+          video.user_id.subscribedBy.includes(localStorage.getItem("userId"))
+        ) {
+          setSubscribed(true);
         }
         setSubscribers(video.user_id.subscribers);
         setLikes(video.likes);
@@ -107,9 +130,14 @@ const VideoPlayer = () => {
       .catch((err) => {
         console.log(err.response);
       });
-  }, [video._id]);
+  }, [video._id, subscribed]);
 
   const dislikeButtonHandler = () => {
+    if (!isLoggedIn) {
+      // Show error toast
+      toast.error("Please Login to perform this action!");
+      return;
+    }
     axios
       .put(
         `${process.env.REACT_APP_BACKEND_URL}/video/dislike/${video._id}`,
@@ -121,7 +149,6 @@ const VideoPlayer = () => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         if (!disliked) {
           setDisliked(true);
           setDislikes((prevDislikes) => prevDislikes + 1);
@@ -139,32 +166,11 @@ const VideoPlayer = () => {
       });
   };
 
-  // Setting the comments list from db
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}/comment/${video._id}`)
-      .then((res) => {
-        console.log(res.data.commentData);
-        const commentsArray = res.data.commentData;
-        setComments(
-          commentsArray.map((comment) => ({
-            _id: comment._id,
-            logo: comment.user_id.logoUrl,
-            channelName: comment.user_id.channelName,
-            commentText: comment.commentText,
-          }))
-        );
-      })
-      .catch((err) => {
-        console.log(err.response);
-      });
-  }, [video._id]);
-
   return (
     <div className="videoplayer-container-main">
       <div className="videoplayer-left">
         <div className="video-player">
-          <video controls className="main-video">
+          <video controls className="main-video" autoPlay key={video.video_url}>
             <source src={video.video_url} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
@@ -172,79 +178,57 @@ const VideoPlayer = () => {
         <div className="video-data">
           <h1 className="videoPlayer-title">{video.title}</h1>
           <div className="videoPlayer-controls">
-            <img src={video.user_id.logoUrl} alt="" className="user-logo" />
-            <div className="channel-info-container">
-              <p className="channelName">{video.user_id.channelName}</p>
-              <p className="subscribers">{subscribers} subscribers</p>
-            </div>
-            <button
-              onClick={subscribeButtonHandler}
-              className={`subscribe-btn ${subscribed ? "subscribed" : ""}`}
+            <div
+              className="channel-info"
+              onClick={() => navigate(`/account/${video.user_id._id}`)}
             >
-              {subscribed ? "Subscribed" : "Subscribe"}
-            </button>
-            <div className="like-dislike-wrapper">
-              <div className="like-btn" onClick={likeButtonHandler}>
-                {liked ? <BiSolidLike /> : <BiLike />}
-                <p className="like-count">{likes}</p>
+              <img src={video.user_id.logoUrl} alt="" className="user-logo" />
+              <div className="channel-info-container">
+                <p className="channelName">{video.user_id.channelName}</p>
+                <p className="subscribers">{subscribers} subscribers</p>
               </div>
-              <div className="dislike-btn" onClick={dislikeButtonHandler}>
-                {disliked ? <BiSolidDislike /> : <BiDislike />}
-                <p className="dilike-count">{dislikes}</p>
+            </div>
+            <div className="action-buttons">
+              {!isOwner && (
+                <button
+                  onClick={subscribeButtonHandler}
+                  className={`subscribe-btn ${subscribed ? "subscribed" : ""}`}
+                >
+                  {subscribed ? "Subscribed" : "Subscribe"}
+                </button>
+              )}
+              <div className="like-dislike-wrapper">
+                <div className="like-btn" onClick={likeButtonHandler}>
+                  {liked ? <BiSolidLike /> : <BiLike />}
+                  <p className="like-count">{likes}</p>
+                </div>
+                <div className="dislike-btn" onClick={dislikeButtonHandler}>
+                  {disliked ? <BiSolidDislike /> : <BiDislike />}
+                  <p className="dislike-count">{dislikes}</p>
+                </div>
               </div>
             </div>
           </div>
+
           <hr className="hr-seperator" />
+
           {/* Description Section */}
           <div className="video-description">
             <div className="video-stats">
               <p className="views">{video.views} views</p>
               <p className="separator">&#9679;</p>
               <p className="videoPlayer-upload-date">
-                {formatDate(video.uploadDate)}
+                {formatDate(video.createdAt)}
               </p>
             </div>
             <p className="description-text">{video.description}</p>
           </div>
         </div>
-
-        {/* Comment Section */}
-        <div className="comment-section">
-          <h3>Comments</h3>
-          <form onSubmit={handleCommentSubmit} className="comment-form">
-            <textarea
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              placeholder="Add a comment..."
-              rows="3"
-              required
-            />
-            <button type="submit" className="comment-submit-btn">
-              Comment
-            </button>
-          </form>
-
-          <div className="comments-list">
-            {comments.map((comment) => (
-              <div key={comment._id} className="comment-container">
-                <img src={comment.logo} alt="" className="user-logo" />
-                <div className="comment-user-details">
-                  <p className="comment-author">{comment.channelName}</p>
-                  <p className="comment-text">{comment.commentText}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* Comment Section*/}
+        <Comment />
       </div>
-
       <div className="videoplayer-right">
-        <h3>Related Videos</h3>
-        <div className="related-videos">
-          <Video />
-          <Video />
-          <Video />
-        </div>
+        <RelatedVideo currentVideo={video} />
       </div>
     </div>
   );

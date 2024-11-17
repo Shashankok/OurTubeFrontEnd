@@ -137,7 +137,11 @@ const UploadVideo = () => {
             required
           />
         </div>
-        <button type="submit" className="submit-btn" disabled={isLoading}>
+        <button
+          type="submit"
+          className="upload-video-submit-btn"
+          disabled={isLoading}
+        >
           {isLoading ? (
             <i className="fa-solid fa-spinner fa-spin-pulse"></i>
           ) : (

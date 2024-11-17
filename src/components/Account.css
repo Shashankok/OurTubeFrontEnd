@@ -1,0 +1,83 @@
+.myAccount-container {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.myAccount-logo {
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+}
+
+.myAccount-right-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.myAccount-separator {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 20px 0;
+}
+
+.myAccount-section {
+  margin-top: 20px;
+}
+
+h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+/* Slider */
+.myAccount-slider {
+  display: flex;
+  overflow-x: auto;
+  gap: 15px;
+  padding: 10px 0;
+  scroll-behavior: smooth;
+  scrollbar-color: red;
+}
+.myAccount-slider::-webkit-scrollbar {
+  height: 8px;
+}
+
+.myAccount-slider::-webkit-scrollbar-track {
+  background: transparent;
+}
+.myAccount-slider::-webkit-scrollbar-thumb {
+  background-color: rgb(179, 179, 179);
+  border-radius: 4px;
+}
+
+/* Videos */
+.myAccount-video-card {
+  flex: 0 0 200px; /* Fixed width for videos */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  text-align: center;
+}
+
+.myAccount-video-thumbnail {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
+
+.myAccount-video-info {
+  padding: 10px;
+}
+
+.myAccount-video-title {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.myAccount-video-views {
+  font-size: 0.85rem;
+  color: #555;
+}

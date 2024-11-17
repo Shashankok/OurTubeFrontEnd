@@ -21,8 +21,9 @@ const Home = () => {
           likes: video.likes,
           dislikes: video.dislikes,
           description: video.description,
-          uploadDate: video.createdAt,
+          createdAt: video.createdAt,
           videoDuration: video.videoDuration,
+          category: video.category,
         }));
         setVideos(filteredVideos);
       })
