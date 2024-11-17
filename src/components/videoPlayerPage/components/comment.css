@@ -61,6 +61,10 @@
   row-gap: 5px;
 }
 
+.user-logo {
+  cursor: pointer;
+}
+
 .comment-author {
   font-weight: bold;
   font-size: 14px;

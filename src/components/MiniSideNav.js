@@ -36,10 +36,6 @@ function MiniSideNav() {
         <FaHome />
         <span className="miniSidenav__label">Home</span>
       </Link>
-      <Link className="miniSidenav__item">
-        <PiVideoFill />
-        <span className="miniSidenav__label">Subscriptions</span>
-      </Link>
       <div onClick={handleAccountClick} className="miniSidenav__item">
         <RiAccountCircleFill />
         <span className="miniSidenav__label">My Account</span>

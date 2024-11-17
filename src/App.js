@@ -10,6 +10,18 @@ import Account from "./components/Account";
 import AppLayout from "./Layouts/AppLayout";
 import UploadVideo from "./components/UploadVideo";
 import VideoPlayer from "./components/VideoPlayer";
+import Search from "./components/Search";
+
+// Protected route check
+const ProtectedRoute = ({ element }) => {
+  const userToken = localStorage.getItem("token"); // Adjust this based on your auth logic
+
+  if (!userToken) {
+    return <Home />; // Redirect to home if not logged in
+  }
+
+  return element;
+};
 
 function App() {
   const myRoutes = createBrowserRouter([
@@ -34,7 +46,7 @@ function App() {
         },
         {
           path: "/upload",
-          element: <UploadVideo />,
+          element: <ProtectedRoute element={<UploadVideo />} />,
         },
         {
           path: "/videoPlayer",
@@ -48,6 +60,7 @@ function App() {
           path: "/login",
           element: <Login />,
         },
+        { path: "/search", element: <Search /> },
       ],
     },
   ]);

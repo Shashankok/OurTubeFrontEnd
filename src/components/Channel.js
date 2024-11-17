@@ -22,7 +22,7 @@ const Channel = () => {
       .catch((error) =>
         console.error("Error fetching subscribed channels:", error)
       );
-  }, []);
+  }, [userId]);
 
   return (
     <div className="myAccount-section">

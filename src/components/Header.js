@@ -2,7 +2,7 @@ import { CiSearch } from "react-icons/ci";
 import { RxHamburgerMenu } from "react-icons/rx";
 import "./header.css";
 import { RiVideoAddLine } from "react-icons/ri";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { PiUserCircle } from "react-icons/pi";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -10,6 +10,14 @@ import { useEffect, useState } from "react";
 function Header() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const [logoUrl, setLogoUrl] = useState(localStorage.getItem("logoUrl"));
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    navigate(`/search?query=${searchQuery}`);
+  };
 
   useEffect(() => {
     setLogoUrl(localStorage.getItem("logoUrl")); // Update logo URL on mount
@@ -27,16 +35,18 @@ function Header() {
           />
         </Link>
       </div>
-      <div className="header__center">
+      <form className="header__center" onSubmit={handleSearch}>
         <input
           type="text"
+          value={searchQuery}
           placeholder="Search"
           className="header__searchInput"
+          onChange={(e) => setSearchQuery(e.target.value)}
         />
         <button className="header__searchButton">
           <CiSearch className="search-icon" />
         </button>
-      </div>
+      </form>
       {isLoggedIn ? (
         <div className="header__right">
           <Link to="/upload" className="links">

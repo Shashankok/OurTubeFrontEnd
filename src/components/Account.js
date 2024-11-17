@@ -53,7 +53,7 @@ const Account = () => {
       <hr className="myAccount-separator" />
 
       <div className="myAccount-section">
-        <h3 className="myAccount-my-videos-heading">Your Videos</h3>
+        <h3 className="myAccount-my-videos-heading">Videos</h3>
         <div className="myAccount-slider">
           {Array.isArray(videos) && videos.length > 0 ? (
             videos.map((video, index) => <Video key={index} video={video} />)

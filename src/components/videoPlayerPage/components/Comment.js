@@ -3,7 +3,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 import "./comment.css";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Comment = () => {
   const commentRefs = useRef({});
@@ -12,12 +13,19 @@ const Comment = () => {
   const [newComment, setNewComment] = useState("");
   const [commentDeleted, setCommentDeleted] = useState(false);
   const [editingCommentId, setEditingCommentId] = useState(null); // Tracks which comment is being edited
-
   const location = useLocation();
   const video = location.state?.video;
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const navigate = useNavigate();
 
   const handleCommentSubmit = (e) => {
     e.preventDefault();
+
+    if (!isLoggedIn) {
+      // Show error toast
+      toast.error("Please Login to perform this action!");
+      return;
+    }
 
     if (!newComment.trim()) {
       toast.error("Comment cannot be empty!");
@@ -187,7 +195,14 @@ const Comment = () => {
                 ref={(el) => (commentRefs.current[comment._id] = el)}
               >
                 <div className="commentList-left-container">
-                  <img src={comment.logo} alt="" className="user-logo" />
+                  <img
+                    src={comment.logo}
+                    alt=""
+                    className="user-logo"
+                    onClick={() =>
+                      navigate(`/account/${comment.commentUserId}`)
+                    }
+                  />
                   <div className="comment-user-details">
                     <p className="comment-author">{comment.channelName}</p>
                     <p className="comment-text">{comment.commentText}</p>
