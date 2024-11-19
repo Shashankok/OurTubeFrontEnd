@@ -65,6 +65,27 @@
   background-color: #cc0000;
 }
 
+.edit-video-btn,
+.delete-video-btn {
+  padding: 10px 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 25px;
+  color: #fff;
+  font-weight: bold;
+  background-color: #065fd4;
+}
+.edit-video-btn:hover {
+  background-color: #0657c0;
+}
+
+.delete-video-btn {
+  background-color: #c02806;
+}
+
+.delete-video-btn:hover {
+  background-color: #a72305;
+}
 .subscribe-btn.subscribed {
   background-color: #929292;
 }

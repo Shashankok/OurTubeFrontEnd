@@ -24,6 +24,7 @@ const Home = () => {
           createdAt: video.createdAt,
           videoDuration: video.videoDuration,
           category: video.category,
+          tags: video.tags,
         }));
         setVideos(filteredVideos);
       })

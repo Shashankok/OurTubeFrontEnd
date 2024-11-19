@@ -20,6 +20,8 @@ const VideoPlayer = () => {
   const [dislikes, setDislikes] = useState(0);
   const [subscribers, setSubscribers] = useState(0);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const [isOwner, setIsowner] = useState(false);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
@@ -64,6 +66,30 @@ const VideoPlayer = () => {
           console.log(err.response);
         });
     }
+  };
+
+  const editVideoButtonHandler = () => {
+    navigate("/upload", { state: { videoData: video } });
+  };
+
+  const deleteVideoButtonHandler = () => {
+    setIsLoading(true);
+    axios
+      .delete(`${process.env.REACT_APP_BACKEND_URL}/video/${video._id}`, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      })
+      .then((res) => {
+        toast.success("Video Deleted Successfully!");
+        navigate("/home");
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.error(err.response);
+        toast.error(err.response.data.error);
+        setIsLoading(false);
+      });
   };
 
   const likeButtonHandler = () => {
@@ -189,12 +215,35 @@ const VideoPlayer = () => {
               </div>
             </div>
             <div className="action-buttons">
-              {!isOwner && (
+              {isOwner && (
+                <button
+                  onClick={deleteVideoButtonHandler}
+                  className="delete-video-btn"
+                >
+                  {isLoading ? (
+                    <i className="fa-solid fa-spinner fa-spin-pulse"></i>
+                  ) : (
+                    "Delete video"
+                  )}
+                </button>
+              )}
+              {!isOwner ? (
                 <button
                   onClick={subscribeButtonHandler}
                   className={`subscribe-btn ${subscribed ? "subscribed" : ""}`}
                 >
                   {subscribed ? "Subscribed" : "Subscribe"}
+                </button>
+              ) : (
+                <button
+                  onClick={editVideoButtonHandler}
+                  className={"edit-video-btn"}
+                >
+                  {isLoading ? (
+                    <i className="fa-solid fa-spinner fa-spin-pulse"></i>
+                  ) : (
+                    "Edit video"
+                  )}
                 </button>
               )}
               <div className="like-dislike-wrapper">
