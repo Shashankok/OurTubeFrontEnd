@@ -3,14 +3,12 @@ import axios from "axios";
 import "./Account.css";
 import Video from "./Video";
 import Channel from "./Channel";
-import { useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
+import { useParams } from "react-router-dom";
 
 const Account = () => {
   const [videos, setVideos] = useState([]);
   const { userId } = useParams();
   const [user, setUser] = useState({});
-  const navigate = useNavigate();
 
   useEffect(() => {
     axios

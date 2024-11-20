@@ -8,6 +8,7 @@ import Comment from "./videoPlayerPage/components/Comment";
 import RelatedVideo from "./videoPlayerPage/components/RelatedVideo";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import Modal from "react-modal";
 
 const VideoPlayer = () => {
   const location = useLocation();
@@ -21,6 +22,7 @@ const VideoPlayer = () => {
   const [subscribers, setSubscribers] = useState(0);
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [isOwner, setIsowner] = useState(false);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -72,7 +74,12 @@ const VideoPlayer = () => {
     navigate("/upload", { state: { videoData: video } });
   };
 
-  const deleteVideoButtonHandler = () => {
+  const deleteVideoHandler = () => {
+    const userConfirmed = window.confirm(
+      "Are you sure you want to delete this video?"
+    );
+    if (!userConfirmed) return;
+
     setIsLoading(true);
     axios
       .delete(`${process.env.REACT_APP_BACKEND_URL}/video/${video._id}`, {
@@ -217,7 +224,7 @@ const VideoPlayer = () => {
             <div className="action-buttons">
               {isOwner && (
                 <button
-                  onClick={deleteVideoButtonHandler}
+                  onClick={() => setIsModalOpen(true)}
                   className="delete-video-btn"
                 >
                   {isLoading ? (
@@ -246,6 +253,20 @@ const VideoPlayer = () => {
                   )}
                 </button>
               )}
+              <Modal
+                isOpen={isModalOpen}
+                onRequestClose={() => setIsModalOpen(false)}
+                overlayClassName="custom-overlay"
+                className="custom-modal"
+              >
+                <h2>Confirm Deletion</h2>
+                <p>Are you sure you want to delete this video?</p>
+                <button onClick={deleteVideoHandler} disabled={isLoading}>
+                  {isLoading ? "Deleting..." : "Yes, Delete"}
+                </button>
+                <button onClick={() => setIsModalOpen(false)}>Cancel</button>
+              </Modal>
+
               <div className="like-dislike-wrapper">
                 <div className="like-btn" onClick={likeButtonHandler}>
                   {liked ? <BiSolidLike /> : <BiLike />}
