@@ -28,9 +28,13 @@ const RelatedVideo = ({ currentVideo }) => {
   return (
     <div className="related-video-container">
       <h3>Related Videos</h3>
-      {relatedVideos.map((video) => (
-        <VideoCard key={video._id} video={video} />
-      ))}
+      {relatedVideos.length > 0 ? (
+        relatedVideos.map((video) => (
+          <VideoCard key={video._id} video={video} />
+        ))
+      ) : (
+        <p>There are no related videos</p>
+      )}
     </div>
   );
 };

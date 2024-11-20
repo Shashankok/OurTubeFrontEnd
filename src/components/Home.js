@@ -5,11 +5,14 @@ import Video from "./Video";
 
 const Home = () => {
   const [videos, setVideos] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getAllVideos = () => {
+    setIsLoading(true);
     axios
       .get(`${process.env.REACT_APP_BACKEND_URL}/video`)
       .then((res) => {
+        setIsLoading(false);
         const filteredVideos = res.data.videos.map((video) => ({
           videoId: video.videoId,
           _id: video._id,
@@ -29,6 +32,7 @@ const Home = () => {
         setVideos(filteredVideos);
       })
       .catch((err) => {
+        setIsLoading(false);
         console.log(err.response);
       });
   };
@@ -37,7 +41,11 @@ const Home = () => {
     getAllVideos();
   }, []);
 
-  return (
+  return isLoading ? (
+    <div className="loader-container">
+      <i className="fa-solid fa-spinner fa-spin-pulse loader-icon" />
+    </div>
+  ) : (
     <div className="single-video-container">
       {videos.map((video, index) => (
         <Video key={index} video={video} />

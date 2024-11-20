@@ -6,3 +6,18 @@
   justify-content: start;
   flex-wrap: wrap;
 }
+
+/* Loader container to center the loader */
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+/* Style for the loader icon */
+.loader-icon {
+  font-size: 4rem;
+  color: #ff0800;
+}
