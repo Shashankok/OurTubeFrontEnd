@@ -18,6 +18,7 @@ const VideoPlayer = () => {
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);
   const [likes, setLikes] = useState(0);
+  const [viewed, setViewed] = useState(false);
   const [dislikes, setDislikes] = useState(0);
   const [subscribers, setSubscribers] = useState(0);
 
@@ -75,11 +76,6 @@ const VideoPlayer = () => {
   };
 
   const deleteVideoHandler = () => {
-    const userConfirmed = window.confirm(
-      "Are you sure you want to delete this video?"
-    );
-    if (!userConfirmed) return;
-
     setIsLoading(true);
     axios
       .delete(`${process.env.REACT_APP_BACKEND_URL}/video/${video._id}`, {
@@ -132,6 +128,39 @@ const VideoPlayer = () => {
         console.log(err.response);
       });
   };
+
+  //For Increasing video views ---- Start
+
+  setTimeout(() => {
+    if (
+      isLoggedIn &&
+      !viewed &&
+      !video.viewedBy.includes(localStorage.getItem("userId"))
+    ) {
+      increaseViewCount();
+    }
+  }, 3000);
+
+  const increaseViewCount = () => {
+    axios
+      .put(
+        `${process.env.REACT_APP_BACKEND_URL}/video/views/${video._id}`,
+        {},
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        }
+      )
+      .then((res) => {
+        setViewed(true);
+      })
+      .catch((err) => {
+        console.error("Error increasing view count:", err);
+      });
+  };
+
+  //For Increasing video views ---- END
 
   useEffect(() => {
     const localUserId = localStorage.getItem("userId");

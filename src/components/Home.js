@@ -13,6 +13,7 @@ const Home = () => {
       .get(`${process.env.REACT_APP_BACKEND_URL}/video`)
       .then((res) => {
         setIsLoading(false);
+        console.log(res.data.videos);
         const filteredVideos = res.data.videos.map((video) => ({
           videoId: video.videoId,
           _id: video._id,
@@ -28,6 +29,7 @@ const Home = () => {
           videoDuration: video.videoDuration,
           category: video.category,
           tags: video.tags,
+          viewedBy: video.viewedBy,
         }));
         setVideos(filteredVideos);
       })
